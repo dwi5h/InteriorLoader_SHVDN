@@ -31,6 +31,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DieptidiUtility_SHVDN">
+      <HintPath>..\..\_Build\DieptidiUtility_SHVDN.dll</HintPath>
+    </Reference>
+    <Reference Include="NativeUI, Version=1.9.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\SDK\NativeUI.dll</HintPath>
+    </Reference>
     <Reference Include="ScriptHookVDotNet3">
       <HintPath>..\..\..\..\SDK\ScriptHookVDotNet3.dll</HintPath>
       <Private>False</Private>
