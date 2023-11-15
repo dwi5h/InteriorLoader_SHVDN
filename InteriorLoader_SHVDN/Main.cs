@@ -2,9 +2,7 @@
 using GTA.Native;
 using System.Windows.Forms;
 using DieptidiUtility_SHVDN;
-using System.IO;
 using NativeUI;
-using System.Collections.Generic;
 
 namespace InteriorLoader_SHVDN
 {
@@ -12,11 +10,9 @@ namespace InteriorLoader_SHVDN
     {
         MenuPool menuPool;
         UIMenu uIBaseMenu;
-        List<UIMenuItem> menuItems;
 
         public Main()
         {
-            menuItems = new List<UIMenuItem>();
             Tick += Main_Tick; ;
             KeyUp += Main_KeyUp;
 
