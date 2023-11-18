@@ -57,11 +57,13 @@ namespace InteriorLoader_SHVDN
             {
                 try
                 {
+                    Function.Call(Hash.SET_INTERIOR_ACTIVE, 68354, true);
+                    Function.Call(Hash.DISABLE_INTERIOR, 68354, false);
                     uIBaseMenu.Visible = !uIBaseMenu.Visible;
                 }
                 catch (System.Exception ex)
                 {
-                    GTA.UI.Notification.Show("error: "+ex.Message);
+                    GTA.UI.Notification.Show("error: " + ex.Message);
 
                 }
             }
