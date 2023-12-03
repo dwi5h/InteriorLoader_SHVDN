@@ -34,6 +34,7 @@ namespace InteriorLoader_SHVDN
             uIBaseMenu.AddItem(new UIMenuItem("Enter Garage Room"));
             uIBaseMenu.AddItem(new UIMenuItem("Activating Interior"));
             uIBaseMenu.AddItem(new UIMenuItem("Refresh Vehicles On Garage"));
+            uIBaseMenu.AddItem(new UIMenuItem("Teleport"));
 
             uIBaseMenu.OnItemSelect += UIBaseMenu_OnItemSelect;
 
@@ -58,6 +59,9 @@ namespace InteriorLoader_SHVDN
                     break;
                 case 3:
                     refreshVehiclesOnGarage();
+                    break;
+                case 4:
+                    teleportToMlo();
                     break;
                 default:
                     break;
@@ -85,13 +89,13 @@ namespace InteriorLoader_SHVDN
                 }
                 catch (System.Exception ex)
                 {
-                    GTA.UI.Notification.Show("error: " + ex.Message);
-
+                    Notification.Show("error: " + ex.Message);
                 }
             }
         }
 
         #region Others
+
         void toggleGarageDoor()
         {
             var garageHash = 2407266048; // Get from Codewalker
@@ -133,6 +137,11 @@ namespace InteriorLoader_SHVDN
             {
                 Function.Call(Hash.FORCE_ROOM_FOR_ENTITY, veh, INTERIOR_ID, ROOM_GARAGE_KEY);
             }
+        }
+        void teleportToMlo()
+        {
+            var interiorPos = new Vector3(870.3091f, -1586.659f, 31.60189f);
+            Function.Call(Hash.START_PLAYER_TELEPORT, Game.Player, interiorPos.X, interiorPos.Y, interiorPos.Z, false, true, true);
         }
         #endregion
 
