@@ -15,7 +15,7 @@ namespace InteriorLoader_SHVDN
         int INTERIOR_ID = 0; // Get from Helper
         uint ROOM_ONE_KEY = 0;  // Get from Helper
         uint ROOM_GARAGE_KEY = 0;  // Get from Helper
-        Vector3 HOUSE_POSITION = new Vector3();
+        Vector3 HOUSE_POSITION = new Vector3(0, 0, 0);
         Vector3 POINT_POSITION = new Vector3(0, 0, 0);
         #endregion
 
@@ -32,13 +32,7 @@ namespace InteriorLoader_SHVDN
 
             uIBaseMenu = new UIMenu("Interior Loader", "");
             uIBaseMenu.MouseControlsEnabled = true;
-            uIBaseMenu.AddItem(new UIMenuItem("Enter Main Room"));
-            uIBaseMenu.AddItem(new UIMenuItem("Enter Garage Room"));
-            uIBaseMenu.AddItem(new UIMenuItem("Activating Interior"));
-            uIBaseMenu.AddItem(new UIMenuItem("Refresh Vehicles On Garage"));
-            uIBaseMenu.AddItem(new UIMenuItem("Set Teleport Point"));
-            uIBaseMenu.AddItem(new UIMenuItem("Teleport to Point"));
-            uIBaseMenu.AddItem(new UIMenuItem("Teleport to House"));
+            UIBaseMenu_ItemBuilder();
 
             uIBaseMenu.OnItemSelect += UIBaseMenu_OnItemSelect;
 
@@ -46,6 +40,17 @@ namespace InteriorLoader_SHVDN
             menuPool.Add(uIBaseMenu);
 
             toggleGarageDoor();
+        }
+
+        private void UIBaseMenu_ItemBuilder()
+        {
+            uIBaseMenu.AddItem(new UIMenuItem("Enter Main Room"));
+            uIBaseMenu.AddItem(new UIMenuItem("Enter Garage Room"));
+            uIBaseMenu.AddItem(new UIMenuItem("Activating Interior"));
+            uIBaseMenu.AddItem(new UIMenuItem("Refresh Vehicles On Garage"));
+            uIBaseMenu.AddItem(new UIMenuItem("Set Teleport Point"));
+            uIBaseMenu.AddItem(new UIMenuItem("Teleport to Point"));
+            uIBaseMenu.AddItem(new UIMenuItem("Teleport to House"));
         }
 
         private void UIBaseMenu_OnItemSelect(UIMenu sender, UIMenuItem selectedItem, int index)
@@ -164,8 +169,10 @@ namespace InteriorLoader_SHVDN
         }
         void teleportToMlo()
         {
-            var interiorPos = new Vector3(870.3091f, -1586.659f, 31.60189f);
-            Function.Call(Hash.START_PLAYER_TELEPORT, Game.Player, interiorPos.X, interiorPos.Y, interiorPos.Z, false, true, true);
+            if (HOUSE_POSITION != new Vector3(0, 0, 0))
+            {
+                Function.Call(Hash.START_PLAYER_TELEPORT, Game.Player, HOUSE_POSITION.X, HOUSE_POSITION.Y, HOUSE_POSITION.Z, false, true, true);
+            }
         }
         #endregion
 
