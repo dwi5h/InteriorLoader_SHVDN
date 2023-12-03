@@ -15,6 +15,8 @@ namespace InteriorLoader_SHVDN
         int INTERIOR_ID = 0; // Get from Helper
         uint ROOM_ONE_KEY = 0;  // Get from Helper
         uint ROOM_GARAGE_KEY = 0;  // Get from Helper
+        Vector3 HOUSE_POSITION = new Vector3();
+        Vector3 POINT_POSITION = new Vector3(0, 0, 0);
         #endregion
 
         MenuPool menuPool;
@@ -34,7 +36,9 @@ namespace InteriorLoader_SHVDN
             uIBaseMenu.AddItem(new UIMenuItem("Enter Garage Room"));
             uIBaseMenu.AddItem(new UIMenuItem("Activating Interior"));
             uIBaseMenu.AddItem(new UIMenuItem("Refresh Vehicles On Garage"));
-            uIBaseMenu.AddItem(new UIMenuItem("Teleport"));
+            uIBaseMenu.AddItem(new UIMenuItem("Set Teleport Point"));
+            uIBaseMenu.AddItem(new UIMenuItem("Teleport to Point"));
+            uIBaseMenu.AddItem(new UIMenuItem("Teleport to House"));
 
             uIBaseMenu.OnItemSelect += UIBaseMenu_OnItemSelect;
 
@@ -61,6 +65,12 @@ namespace InteriorLoader_SHVDN
                     refreshVehiclesOnGarage();
                     break;
                 case 4:
+                    setTeleportPoint();
+                    break;
+                case 5:
+                    teleportToPoint();
+                    break;
+                case 6:
                     teleportToMlo();
                     break;
                 default:
@@ -95,7 +105,6 @@ namespace InteriorLoader_SHVDN
         }
 
         #region Others
-
         void toggleGarageDoor()
         {
             var garageHash = 2407266048; // Get from Codewalker
@@ -107,7 +116,7 @@ namespace InteriorLoader_SHVDN
                 Helper.ToggleEnableDoorOpen(garageHash, doorGaragePosition, true);
                 Notification.Show("~y~Garage Door ~w~Opened");
             }
-            else if(distance <= 25f)
+            else if (distance <= 25f)
             {
                 Helper.ToggleEnableDoorOpen(garageHash, doorGaragePosition, false);
                 Notification.Show("~y~Garage Door ~w~Closed");
@@ -138,6 +147,21 @@ namespace InteriorLoader_SHVDN
                 Function.Call(Hash.FORCE_ROOM_FOR_ENTITY, veh, INTERIOR_ID, ROOM_GARAGE_KEY);
             }
         }
+        void setTeleportPoint()
+        {
+            POINT_POSITION = Game.Player.Character.Position;
+            Notification.Show("Current Position ~g~Saved");
+        }
+        void teleportToPoint()
+        {
+            if (POINT_POSITION != new Vector3(0, 0, 0))
+            {
+                Function.Call(Hash.START_PLAYER_TELEPORT,
+                    Game.Player,
+                    POINT_POSITION.X, POINT_POSITION.Y, POINT_POSITION.Z,
+                    false, true, true);
+            }
+        }
         void teleportToMlo()
         {
             var interiorPos = new Vector3(870.3091f, -1586.659f, 31.60189f);
@@ -151,13 +175,33 @@ namespace InteriorLoader_SHVDN
             Helper.SetConfigValue<int>(CONFIG_NAME, "INTERIOR", "INTERIOR_ID", 68610);
             Helper.SetConfigValue<uint>(CONFIG_NAME, "INTERIOR", "ROOM_ONE_KEY", 1757644675);
             Helper.SetConfigValue<uint>(CONFIG_NAME, "INTERIOR", "ROOM_GARAGE_KEY", 2570446951);
+
+            Helper.SetConfigValue<float>(CONFIG_NAME, "INTERIOR", "HOUSE_POSITION_X", 870.3091f);
+            Helper.SetConfigValue<float>(CONFIG_NAME, "INTERIOR", "HOUSE_POSITION_Y", -1586.659f);
+            Helper.SetConfigValue<float>(CONFIG_NAME, "INTERIOR", "HOUSE_POSITION_Z", 31.60189f);
             loadConfig();
         }
         void loadConfig()
         {
-            INTERIOR_ID = Helper.GetConfigValue(CONFIG_NAME, "INTERIOR", "INTERIOR_ID", 0);
-            ROOM_ONE_KEY = Helper.GetConfigValue<uint>(CONFIG_NAME, "INTERIOR", "ROOM_ONE_KEY", 0);
-            ROOM_GARAGE_KEY = Helper.GetConfigValue<uint>(CONFIG_NAME, "INTERIOR", "ROOM_GARAGE_KEY", 0);
+            try
+            {
+                INTERIOR_ID = Helper.GetConfigValue(CONFIG_NAME, "INTERIOR", "INTERIOR_ID", 0);
+                ROOM_ONE_KEY = Helper.GetConfigValue<uint>(CONFIG_NAME, "INTERIOR", "ROOM_ONE_KEY", 0);
+                ROOM_GARAGE_KEY = Helper.GetConfigValue<uint>(CONFIG_NAME, "INTERIOR", "ROOM_GARAGE_KEY", 0);
+
+                float housePositionX = Helper.GetConfigValue<float>(CONFIG_NAME, "INTERIOR", "HOUSE_POSITION_X", -0.000001955f);
+                float housePositionY = Helper.GetConfigValue<float>(CONFIG_NAME, "INTERIOR", "HOUSE_POSITION_Y", -0.000001955f);
+                float housePositionZ = Helper.GetConfigValue<float>(CONFIG_NAME, "INTERIOR", "HOUSE_POSITION_Z", -0.000001955f);
+
+                if (housePositionX != -0.000001955f && housePositionY != 0.000001955f && housePositionZ != 0.000001955f)
+                {
+                    HOUSE_POSITION = new Vector3(housePositionX, housePositionY, housePositionZ);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                throw ex;
+            }
         }
         #endregion
     }
