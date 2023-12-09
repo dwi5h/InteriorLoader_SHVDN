@@ -95,6 +95,7 @@ namespace InteriorLoader_SHVDN
             {
                 _toggleGarageDoor = !_toggleGarageDoor;
                 toggleGarageDoor();
+                refreshVehiclesOnGarage();
             }
             if (e.KeyCode == Keys.F1)
             {
@@ -145,11 +146,16 @@ namespace InteriorLoader_SHVDN
         }
         void refreshVehiclesOnGarage()
         {
-            Function.Call(Hash.FORCE_ROOM_FOR_ENTITY, Game.Player.Character, INTERIOR_ID, ROOM_GARAGE_KEY);
-            Vehicle[] vehicles = Helper.GetNearbyVehiclesInFrontPlayer(10f);
-            foreach (var veh in vehicles)
+            var garagePosition = new Vector3(878.0764f, -1584.06f, 30.87137f);
+            var distance = World.GetDistance(Game.Player.Character.Position, garagePosition);
+            if (distance <= 10f)
             {
-                Function.Call(Hash.FORCE_ROOM_FOR_ENTITY, veh, INTERIOR_ID, ROOM_GARAGE_KEY);
+                Function.Call(Hash.FORCE_ROOM_FOR_ENTITY, Game.Player.Character, INTERIOR_ID, ROOM_GARAGE_KEY);
+                Vehicle[] vehicles = World.GetNearbyVehicles(garagePosition, 20f);
+                foreach (var veh in vehicles)
+                {
+                    Function.Call(Hash.FORCE_ROOM_FOR_ENTITY, veh, INTERIOR_ID, ROOM_GARAGE_KEY);
+                }
             }
         }
         void setTeleportPoint()
